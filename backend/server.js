@@ -21,6 +21,7 @@ connectCloudinary();
 // Allowed frontend origins
 const allowedOrigins = [
     'https://e-commerce-website-umi7.vercel.app',
+    'https://e-commerce-website-royx.vercel.app',
     'http://localhost:5173',
     'http://localhost:5174',
 ];
