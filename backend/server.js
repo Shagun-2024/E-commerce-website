@@ -14,10 +14,6 @@ import uploadRouter from './routes/uploadRouter.js';
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Connect services
-connectDB();
-connectCloudinary();
-
 // Allowed frontend origins
 const allowedOrigins = [
     'https://e-commerce-website-umi7.vercel.app',
@@ -31,6 +27,7 @@ const corsOptions = {
     credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
 };
+
 // Middlewares
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -43,10 +40,26 @@ app.use('/api/order', orderRouter);
 app.use('/api/reels', reelRouter);
 app.use('/upload', uploadRouter);
 
+// Health check
 app.get('/', (req, res) => {
     res.send('API Working');
 });
 
-app.listen(port, () => {
-    console.log(`Server started on PORT: ${port}`);
-});
+// Start server after connecting services
+const startServer = async () => {
+    try {
+        await connectDB();
+        await connectCloudinary();
+
+        app.listen(port, () => {
+            console.log(`Server started on PORT: ${port}`);
+        });
+    } catch (error) {
+        console.error('Server startup failed:', error.message);
+        process.exit(1);
+    }
+};
+
+startServer();
+
+export default app;
