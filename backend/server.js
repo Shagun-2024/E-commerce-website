@@ -26,24 +26,13 @@ const allowedOrigins = [
     'http://localhost:5174',
 ];
 
+const corsOptions = {
+    origin: allowedOrigins,
+    credentials: true,
+    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+};
 // Middlewares
-app.use(
-    cors({
-        origin: (origin, callback) => {
-            // Allow requests without an Origin header (e.g. Postman)
-            if (!origin || allowedOrigins.includes(origin)) {
-                return callback(null, true);
-            }
-
-            console.error('CORS blocked origin:', origin);
-            return callback(new Error('Not allowed by CORS'));
-        },
-        credentials: true,
-        methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'token'],
-    })
-);
-
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // API endpoints
